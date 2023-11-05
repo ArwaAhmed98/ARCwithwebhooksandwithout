@@ -29,22 +29,24 @@ in the webhook URL field add the Ingress URL of the target GitHub application.
     ```
     ```bash
      kubectl create secret generic controller-manager-webhook \
-        -n actions-runner-system \
+        -n actions-runner-system-webhook \
         --from-literal=github_app_id=${APP_ID} \
         --from-literal=github_app_installation_id=${INSTALLATION_ID} \
         --from-file=github_app_private_key=${PRIVATE_KEY_FILE_PATH}
     ```
 3. Apply your helm chart with the new values mentioned in the values.yml file:
     ```bash
-    helm upgrade --install --namespace actions-runner-system \
+    helm repo add actions-runner-controller-webhook https://actions-runner-controller.github.io/actions-runner-controller
+    helm upgrade --install --namespace actions-runner-system-webhook \
                  -f values.yml \
                  --wait actions-runner-controller-webhook actions-runner-controller-webhook/actions-runner-controller
     ```
 4. Apply your deployment:
     ```bash
-    kubectl apply -f DeploymentRunner.yml
+    kubectl apply -f runnerdeployment-generic.yaml
     ```
-5. Generate a random complex string with `pwgen cli`. Combine complex strings together to form a single one. Then configure GitHub app > General > webhook secret > Update value of that secret. As well the `controller-manager-webhook-token` to be the same value:
+- Not necessary, works with just adding the github token in the controller-manager-webhook secret with value github_token as a key and its value is the GHE token generated 
+5. Generate a random complex string with `pwgen cli`. Combine complex strings together to form a single one. Then configure GitHub app > General > webhook secret > Update value of that secret. As well the `github_webhook_secret_token` to be the same value:
     ```bash
     brew install pwgen
     pwgen
