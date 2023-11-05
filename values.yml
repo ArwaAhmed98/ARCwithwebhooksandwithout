@@ -1,12 +1,16 @@
 githubWebhookServer:
+  nodeSelector:
+    role: internal_apps
+  tolerations:
+  - key: usage
+    value: apps
+
   enabled: true
   secret:
     create: true
     enabled: true
     name: github-webhook-server # value of the secret passed with the pwgen
-  
-
-
+    #github-webhook-server: <webhook_secret_value>
   ingress:
     annotations:
       alb.ingress.kubernetes.io/actions.ssl-redirect: >-
@@ -17,7 +21,7 @@ githubWebhookServer:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/group.order: "2"
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-      alb.ingress.kubernetes.io/healthcheck-path: /login
+      alb.ingress.kubernetes.io/healthcheck-path: /
       kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/target-type: ip
     enabled: true
@@ -36,15 +40,18 @@ githubWebhookServer:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: oneplatform-testbot
+                name: actions-runner-controller-webhook-github-webhook-server
                 port:
-                  number: 8080
+                  number: 80
 
-
-
-githubEnterpriseServerURL: https://github.vodafone.com 
-runnerGithubURL: https://github.vodafone.com 
-githubURL: https://github.vodafone.com/api/v3 
+githubEnterpriseServerURL: https://github.vodafone.com
+runnerGithubURL: https://github.vodafone.com
+githubURL: https://github.vodafone.com/api/v3
 githubUploadURL: https://github.vodafone.com/api/v3
 authSecret:
   name: controller-manager-webhook # auth controller with github
+nodeSelector:
+  role: internal_apps
+tolerations:
+  - key: usage
+    value: apps
