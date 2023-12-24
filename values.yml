@@ -44,10 +44,10 @@ githubWebhookServer:
                 port:
                   number: 80
 
-githubEnterpriseServerURL: https://github.vodafone.com
-runnerGithubURL: https://github.vodafone.com
-githubURL: https://github.vodafone.com/api/v3
-githubUploadURL: https://github.vodafone.com/api/v3
+githubEnterpriseServerURL: https://github.com
+runnerGithubURL: https://github.com
+githubURL: https://github.com/api/v3
+githubUploadURL: https://github.com/api/v3
 authSecret:
   name: controller-manager-webhook # auth controller with github
 nodeSelector:
